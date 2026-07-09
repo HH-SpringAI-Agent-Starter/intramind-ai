@@ -16,6 +16,27 @@
 - Apache-2.0 友好的开源项目结构
 - 可作为 Open Core 的免费获客漏斗
 
+        ## 技术栈
+
+| 层级 | 技术 | 版本 | 用途 |
+|------|------|------|------|
+| Agent 框架 | Spring AI | 2.0.0 | Agent 编排与 Tool Calling |
+| 应用框架 | Spring Boot | 4.0.0 | 微服务底座 |
+| 语言 | Java | 21 | 开发语言 |
+| 构建工具 | Maven | 3.9+ | 依赖与构建 |
+| LLM | Ollama (qwen2.5:7b) | latest | 本地模型推理 |
+| Embedding | Ollama (mxbai-embed-large) | latest | 文档向量化 |
+| 向量数据库 | PGVector | latest | 语义检索 HNSW |
+| 关系数据库 | PostgreSQL | 16 | 业务数据 |
+| 对象存储 | MinIO / Aliyun OSS | latest | 文档存储 |
+| 会话缓存 | Redis | 7 | 对话上下文 |
+| 可观测性 | Prometheus / Actuator | latest | 监控与健康 |
+| 数据库迁移 | Flyway | 10.x | Schema 版本管理 |
+
+> 📖 详细架构见 [docs/architecture.md](docs/architecture.md) · API 文档见 [docs/api.md](docs/api.md) · 部署指南见 [docs/deployment.md](docs/deployment.md)
+
+---
+
         ## 核心能力
 
         - Spring AI `ChatClient` Agent 编排
@@ -98,7 +119,7 @@
 
 ## 架构图
 
-`mermaid
+```mermaid
 graph TD
     Client[员工 / API Client] --> Gateway[Spring Boot API Gateway]
     Gateway --> Agent[Agent Orchestrator ChatClient]
@@ -114,7 +135,7 @@ graph TD
     Agent --> LLM[LLM Ollama qwen2.5]
     Gateway --> Redis[(Redis 会话缓存)]
     Gateway --> DB[(PostgreSQL)]
-`
+```
 
 ## 许可
 
