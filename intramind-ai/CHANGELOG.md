@@ -1,3 +1,10 @@
+## [1.0.1] - 2026-07-23
+
+### Documentation
+- Update root README with cross-project matrix table
+- Fix emoji rendering issues in README
+- Clean up formatting and add project structure section
+
 # Changelog
 
 All notable changes to IntraMind AI Community Edition will be documented in this file.
