@@ -6,38 +6,39 @@
 [![Spring AI](https://img.shields.io/badge/Spring%20AI-2.0.0-green)](https://spring.io/projects/spring-ai)
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](CONTRIBUTING.md)
 
-> **涓€鍙ヨ瘽**锛氫紒涓氬唴閮ㄧ煡璇嗙鐞?AI Agent銆傛枃妗ｆ櫤鑳介棶绛斻€佺煡璇嗗浘璋辫嚜鍔ㄦ瀯寤恒€佷細璁邯瑕?AI 鎽樿銆?
-**IntraMind AI** 鏄竴濂椾紒涓氱煡璇嗙鐞?AI Agent + RAG 绯荤粺锛屽熀浜?**Spring AI + Agent Tool Calling + PGVector RAG** 鏋勫缓銆?
+> **一句话：企业内部知识管理 AI Agent。文档智能问答、知识图谱自动构建、会议纪要 AI 摘要。**
+**IntraMind AI** 是一套企业知识管理 AI Agent + RAG 系统，基于 **Spring AI + Agent Tool Calling + PGVector RAG** 构建。
+
 ---
 
-## 绯荤粺鏋舵瀯
+## 系统架构
 
 ```mermaid
 graph TB
-    subgraph Client["瀹㈡埛绔眰"]
+    subgraph Client["客户端层"]
         UI["Web UI<br/>(React/Angular)"]
         API["REST API<br/>(OpenAPI 3.0)"]
     end
 
-    subgraph Agent["Agent 灞?路 Spring AI"]
-        QA["闂瓟 Agent<br/>Document QA"]
-        KG["鐭ヨ瘑鍥捐氨 Agent<br/>Knowledge Graph"]
-        MT["浼氳 Agent<br/>Meeting Transcript"]
-        ORCH["Orchestrator<br/>鎰忓浘璺敱+宸ュ叿缂栨帓"]
+    subgraph Agent["Agent 层 · Spring AI"]
+        QA["问答 Agent<br/>Document QA"]
+        KG["知识图谱 Agent<br/>Knowledge Graph"]
+        MT["会议 Agent<br/>Meeting Transcript"]
+        ORCH["Orchestrator<br/>意图路由+工具编排"]
     end
 
-    subgraph Tools["Tool 灞?]
-        DT["Doc Tool<br/>PDF/Word/MD 瑙ｆ瀽"]
-        KT["KGraph Tool<br/>Entity-Relation 鎻愬彇"]
-        MT2["Meeting Tool<br/>ASR + 鍏抽敭鐐?]
-        RT["RAG Tool<br/>璇箟妫€绱?]
+    subgraph Tools["Tool 层"]
+        DT["Doc Tool<br/>PDF/Word/MD 解析"]
+        KT["KGraph Tool<br/>Entity-Relation 提取"]
+        MT2["Meeting Tool<br/>ASR + 关键点"]
+        RT["RAG Tool<br/>语义检索"]
     end
 
-    subgraph Infra["鍩虹璁炬柦"]
+    subgraph Infra["基础设施"]
         PG[("PostgreSQL 16<br/>+ PGVector")]
-        MO[("MinIO<br/>瀵硅薄瀛樺偍")]
+        MO[("MinIO<br/>对象存储")]
         LLM[("Ollama<br/>qwen2.5:7b")]
-        RD[("Redis<br/>缂撳瓨+浼氳瘽")]
+        RD[("Redis<br/>缓存+会话")]
     end
 
     Client --> ORCH
@@ -58,52 +59,49 @@ graph TB
     style LLM fill:#2c3e50,color:#fff
 ```
 
-### 鏁版嵁娴?
+### 数据流
 ```
-鐢ㄦ埛鎻愰棶 鈫?Orchestrator 鎰忓浘璇嗗埆
-         鈹溾攢 鏂囨。绫?鈫?Doc Tool 瑙ｆ瀽 鈫?PGVector 妫€绱?鈫?LLM 鐢熸垚鍥炵瓟
-         鈹溾攢 鐭ヨ瘑绫?鈫?KGraph Tool 瀹炰綋鎶藉彇 鈫?鍥炬煡璇?鈫?LLM 鍏宠仈瑙ｉ噴
-         鈹斺攢 浼氳绫?鈫?Meeting Tool ASR 杞啓 鈫?鍏抽敭鐐规彁鍙?鈫?LLM 鎽樿
+用户提问 → Orchestrator 意图识别
+          ├── 文档类 → Doc Tool 解析 → PGVector 检索 → LLM 生成回答
+          ├── 知识类 → KGraph Tool 实体抽取 → 图查询 → LLM 关联解释
+          └── 会议类 → Meeting Tool ASR 转写 → 关键点提取 → LLM 摘要
 ```
 
 ---
 
-## 鐩綍
+## 目录
 
-1. [涓轰粈涔堥€夋嫨 IntraMind](#1-涓轰粈涔堥€夋嫨-intramind)
-2. [鍔熻兘鐭╅樀](#2-鍔熻兘鐭╅樀)
-3. [蹇€熷紑濮媇(#3-蹇€熷紑濮?
-4. [甯歌闂](#4-甯歌闂)
-5. [椤圭洰缁撴瀯](#5-椤圭洰缁撴瀯)
-6. [椤圭洰鐭╅樀](#6-椤圭洰鐭╅樀)
-7. [璐＄尞涓庤鍙痌(#7-璐＄尞涓庤鍙?
+1. [为什么选择 IntraMind](#1-为什么选择-intramind)
+2. [功能矩阵](#2-功能矩阵)
+3. [快速开始](#3-快速开始)
+4. [常见问题](#4-常见问题)
+5. [项目结构](#5-项目结构)
+6. [项目矩阵](#6-项目矩阵)
+7. [贡献与许可](#7-贡献与许可)
 
 ---
 
-## 1. 涓轰粈涔堥€夋嫨 IntraMind
+## 1. 为什么选择 IntraMind
 
-| 缁村害 | IntraMind | 閫氱敤鏂规 |
+| 维度 | IntraMind | 通用方案 |
 |------|-----------|---------|
-| 涓撲笟鎬?| 浼佷笟鐭ヨ瘑绠＄悊棰嗗煙娣卞害浼樺寲 | 閫氱敤鐭ヨ瘑锛屾棤琛屼笟鏁版嵁 |
-| 閮ㄧ讲鏂瑰紡 | 鏈湴閮ㄧ讲锛圤llama锛?| SaaS only |
-| 鍙璁℃€?| 寮€婧愬彲瀹℃煡 | 榛戠洅 |
-| 鏁版嵁瀹夊叏 | 鏁版嵁鍦ㄥ唴缃?| 鏁版嵁鍦ㄤ簯绔?|
+| 专业性 | 企业知识管理领域深度优化 | 通用知识，无行业数据 |
+| 部署方式 | 本地部署（Ollama） | SaaS only |
+| 可审计性 | 开源可审计 | 黑盒 |
+| 数据安全 | 数据在内网 | 数据在云端 |
 
----
+## 2. 功能矩阵
 
-## 2. 鍔熻兘鐭╅樀
-
-| 妯″潡 | 绀惧尯鐗堬紙鍏嶈垂寮€婧愶級 | 浼佷笟鐗?|
+| 模块 | 社区版（免费开源） | 企业版 |
 |------|-----------------|--------|
-| 妯″瀷鎺ュ叆 | Ollama 鏈湴妯″瀷 | Ollama / DeepSeek / OpenAI / 閫氫箟 |
-| RAG 鐭ヨ瘑搴?| 绀轰緥鐭ヨ瘑搴?| 澶氱鎴枫€佸宸ヤ綔鍖洪殧绂?|
-| 鏍稿績鍔熻兘 | 鍩虹闂瓟 | 鎵归噺澶勭悊銆佽嚜鍔ㄦ姤鍛娿€佸畾鏃朵换鍔?|
-| 鏉冮檺绠＄悊 | 鏃?| 缁勭粐銆佸伐浣滃尯銆佽鑹层€佹暟鎹潈闄?|
-| 鍚堣瀹¤ | 鍏嶈矗澹版槑 | 瀹¤鏃ュ織銆佸紩鐢ㄥ己鍒躲€佹晱鎰熸嫤鎴?|
+| 模型接入 | Ollama 本地模型 | Ollama / DeepSeek / OpenAI / 通义 |
+| RAG 知识库 | 示例知识库 | 多租户、多工作区隔离 |
+| 核心功能 | 基础问答 | 批量处理、自动报告、定时任务 |
+| 权限管理 | 无 | 组织、工作区、角色、数据权限 |
+| 合规审计 | 免责声明 | 审计日志、引用强制、敏感拦截 |
 
----
+## 3. 快速开始
 
-## 3. 蹇€熷紑濮?
 ```bash
 git clone https://github.com/HH-SpringAI-Agent-Starter/intramind-ai.git
 cd intramind-ai/intramind-ai
@@ -113,62 +111,56 @@ ollama pull qwen2.5:7b
 mvn spring-boot:run
 ```
 
-**鐜瑕佹眰**锛欽DK 21+ 路 Maven 3.9+ 路 Docker 路 Ollama
+**环境要求：** JDK 21+ · Maven 3.9+ · Docker · Ollama
 
----
-
-## 4. 甯歌闂
+## 4. 常见问题
 
 <details>
-<summary><b>Q: IntraMind 鏄粈涔堬紵</b></summary>
-
-浼佷笟鍐呴儴鐭ヨ瘑绠＄悊 AI Agent銆傛枃妗ｆ櫤鑳介棶绛斻€佺煡璇嗗浘璋辫嚜鍔ㄦ瀯寤恒€佷細璁邯瑕?AI 鎽樿銆?</details>
-
-<details>
-<summary><b>Q: 鍜?Notion AI 鐨勫尯鍒紵</b></summary>
-
-Notion 鏄?SaaS 鏁版嵁鍦ㄥ锛汭ntraMind 绉佹湁鍖栭儴缃叉暟鎹湪鍐呯綉锛屼笖鏀寔鐭ヨ瘑鍥捐氨銆?</details>
+<summary><b>Q: IntraMind 是什么？</b></summary>
+企业内部知识管理 AI Agent。文档智能问答、知识图谱自动构建、会议纪要 AI 摘要。</details>
 
 <details>
-<summary><b>Q: 鏀寔鍝簺鏂囨。鏍煎紡锛?/b></summary>
+<summary><b>Q: 和 Notion AI 的区别？</b></summary>
+Notion 是 SaaS 数据在外；IntraMind 私有化部署数据在内网，且支持知识图谱。</details>
 
-PDF/Word/Markdown/HTML/TXT/閭欢/褰曢煶銆備紒涓氱増鏀寔 OCR銆?</details>
+<details>
+<summary><b>Q: 支持哪些文档格式？</b></summary>
+PDF/Word/Markdown/HTML/TXT/邮件/录音。企业版支持 OCR。</details>
 
----
-
-## 5. 椤圭洰缁撴瀯
+## 5. 项目结构
 
 ```
 intramind-ai/
-鈹溾攢鈹€ intramind-ai/       # 涓婚」鐩唬鐮?鈹?  鈹溾攢鈹€ src/            # Java 婧愮爜锛圫pring AI Agent锛?鈹?  鈹溾攢鈹€ docs/           # 鏂囨。锛堟灦鏋?閮ㄧ讲/API/瀹夊叏锛?鈹?  鈹溾攢鈹€ pom.xml         # Maven 鏋勫缓閰嶇疆
-鈹?  鈹溾攢鈹€ docker-compose.yml
-鈹?  鈹溾攢鈹€ requirements.md # 鍔熻兘闇€姹傛枃妗?鈹?  鈹溾攢鈹€ CHANGELOG.md    # 鍙樻洿鏃ュ織
-鈹?  鈹斺攢鈹€ CONTRIBUTING.md # 璐＄尞鎸囧崡
-鈹斺攢鈹€ README.md           # 鏍?README
+├── intramind-ai/       # 主项目代码
+│   ├── src/            # Java 源码（Spring AI Agent）
+│   ├── docs/           # 文档（架构/部署/API/安全）
+│   ├── pom.xml         # Maven 构建配置
+│   ├── docker-compose.yml
+│   ├── requirements.md # 功能需求文档
+│   ├── CHANGELOG.md    # 变更日志
+│   └── CONTRIBUTING.md # 贡献指南
+└── README.md           # 根 README
 ```
 
----
+## 6. 项目矩阵
 
-## 6. 椤圭洰鐭╅樀
-
-| 椤圭洰 | 棰嗗煙 | 浠ｇ爜鐘舵€?|
+| 项目 | 领域 | 代码状态 |
 |------|------|----------|
-| [agromind-ai](https://github.com/HH-SpringAI-Agent-Starter/agromind-ai) | 鏅烘収鍐滀笟 | 鉁?瀹屾暣 |
-| [bizflow-ai](https://github.com/HH-SpringAI-Agent-Starter/bizflow-ai) | 涓氬姟娴佺▼鑷姩鍖?| 馃煛 鍩虹 |
-| [edututor-ai](https://github.com/HH-SpringAI-Agent-Starter/edututor-ai) | 鏅鸿兘鏁欒偛 | 鉁?瀹屾暣 |
-| [finmind-ai](https://github.com/HH-SpringAI-Agent-Starter/finmind-ai) | 閲戣瀺鍒嗘瀽 | 鉁?瀹屾暣 |
-| [intramind-ai](https://github.com/HH-SpringAI-Agent-Starter/intramind-ai) | 浼佷笟鐭ヨ瘑绠＄悊 | 鉁?褰撳墠 |
-| [lawguard-ai](https://github.com/HH-SpringAI-Agent-Starter/lawguard-ai) | 娉曞緥鍚堣 | 鉁?瀹屾暣 |
-| [mediguide-ai](https://github.com/HH-SpringAI-Agent-Starter/mediguide-ai) | 鍖荤枟鍋ュ悍 | 鉁?瀹屾暣 |
-| [runops-ai](https://github.com/HH-SpringAI-Agent-Starter/runops-ai) | 鏅鸿兘杩愮淮 | 鉁?瀹屾暣 |
-| [scholarmind-ai](https://github.com/HH-SpringAI-Agent-Starter/scholarmind-ai) | 瀛︽湳鐮旂┒ | 鉁?瀹屾暣 |
+| [agromind-ai](https://github.com/HH-SpringAI-Agent-Starter/agromind-ai) | 智慧农业 | ✅ 完整 |
+| [bizflow-ai](https://github.com/HH-SpringAI-Agent-Starter/bizflow-ai) | 业务流程自动化 | 🔛 基础 |
+| [edututor-ai](https://github.com/HH-SpringAI-Agent-Starter/edututor-ai) | 智能教育 | ✅ 完整 |
+| [finmind-ai](https://github.com/HH-SpringAI-Agent-Starter/finmind-ai) | 金融分析 | ✅ 完整 |
+| [intramind-ai](https://github.com/HH-SpringAI-Agent-Starter/intramind-ai) | 企业知识管理 | ✅ 当前 |
+| [lawguard-ai](https://github.com/HH-SpringAI-Agent-Starter/lawguard-ai) | 法律合规 | ✅ 完整 |
+| [mediguide-ai](https://github.com/HH-SpringAI-Agent-Starter/mediguide-ai) | 医疗健康 | ✅ 完整 |
+| [runops-ai](https://github.com/HH-SpringAI-Agent-Starter/runops-ai) | 智能运维 | ✅ 完整 |
+| [scholarmind-ai](https://github.com/HH-SpringAI-Agent-Starter/scholarmind-ai) | 学术研究 | ✅ 完整 |
+
+## 7. 贡献与许可
+
+- **许可证**：社区版 [Apache-2.0](LICENSE)
+- **作者**：[HH-SpringAI-Agent-Starter](https://github.com/HH-SpringAI-Agent-Starter)
 
 ---
 
-## 7. 璐＄尞涓庤鍙?
-- **璁稿彲璇?*锛氱ぞ鍖虹増 [Apache-2.0](LICENSE)
-- **浣滆€?*锛歔HH-SpringAI-Agent-Starter](https://github.com/HH-SpringAI-Agent-Starter)
-
----
-
-> 鍏宠仈椤圭洰锛歔IntraMind Enterprise锛堜紒涓氱増锛塢(https://github.com/HH-SpringAI-Agent-Starter/intramind-enterprise)
+> 关联项目：[IntraMind Enterprise（企业版）](https://github.com/HH-SpringAI-Agent-Starter/intramind-enterprise)
