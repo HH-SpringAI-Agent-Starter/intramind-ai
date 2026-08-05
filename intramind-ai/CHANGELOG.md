@@ -1,3 +1,17 @@
+## [1.1.0] - 2026-08-05
+
+### Added
+- Real PGVector RAG retrieval in `KnowledgeBaseService`
+  - Wire Spring AI `VectorStore.similaritySearch()` with tenant metadata filter
+  - Graceful fallback when VectorStore is not configured (demo keeps working)
+- `KnowledgeBaseService.add()` to index tenant-scoped documents into the vector store
+- Unit tests: `KnowledgeBaseServiceTest` (fallback + missing-vector-store paths)
+
+### Changed
+- `KnowledgeBaseService` upgraded from demo stub to VectorStore-backed implementation
+
+---
+
 ## [1.0.1] - 2026-07-23
 
 ### Documentation
