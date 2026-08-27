@@ -1,3 +1,17 @@
+# Changelog
+
+All notable changes to IntraMind AI Community Edition will be documented in this file.
+
+## [1.1.1] - 2026-08-27
+
+### Maintenance
+- Rotation check-in (HH-SpringAI-Agent-Starter daily rotation, 2026-08-27)
+- Root `.gitignore` expanded from 40B stub to full Java/Maven/IDE/Docker/secrets rules
+- Fixed emoji mojibake in root CHANGELOG/CONTRIBUTING
+- Upgraded LICENSE files to full Apache-2.0 text
+- Fixed sub-project README rendering (removed excessive leading indentation, dropped duplicate API row)
+- Fixed changelog section ordering
+
 ## [1.1.0] - 2026-08-05
 
 ### Added
@@ -18,10 +32,6 @@
 - Update root README with cross-project matrix table
 - Fix emoji rendering issues in README
 - Clean up formatting and add project structure section
-
-# Changelog
-
-All notable changes to IntraMind AI Community Edition will be documented in this file.
 
 ## [0.1.0] - 2026-07-09
 
