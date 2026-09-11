@@ -1,5 +1,13 @@
 # Changelog
 
+## v1.1.2 (2026-09-11)
+
+### 维护
+- 每日轮转巡检维护（HH-SpringAI-Agent-Starter 每日轮转）
+- 新增根目录 SECURITY.md：支持版本表、漏洞报告流程、多租户/RBAC/审计等安全设计说明
+- 新增根目录 CODE_OF_CONDUCT.md：贡献者行为准则（Contributor Covenant 2.1）
+- 文档体系补全确认：根目录 README / CHANGELOG / CONTRIBUTING / requirements.md / LICENSE 已齐全
+
 ## v1.1.1 (2026-08-27)
 
 ### 🔧 维护
