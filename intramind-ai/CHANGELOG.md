@@ -2,6 +2,20 @@
 
 All notable changes to IntraMind AI Community Edition will be documented in this file.
 
+## [1.1.3] - 2026-09-22
+
+### Maintenance
+- Rotation check-in (HH-SpringAI-Agent-Starter daily rotation, 2026-09-22)
+- Back-filled missing [1.1.2] entry to keep sub-changelog in sync with root
+- Aligned README tool list with `DomainTools` (added `knowledge_search`)
+
+## [1.1.2] - 2026-09-11
+
+### Maintenance
+- Rotation check-in (HH-SpringAI-Agent-Starter daily rotation, 2026-09-11)
+- Added root SECURITY.md (supported versions, vulnerability reporting, security design notes for multi-tenancy/RBAC/audit)
+- Added root CODE_OF_CONDUCT.md (Contributor Covenant 2.1)
+
 ## [1.1.1] - 2026-08-27
 
 ### Maintenance
