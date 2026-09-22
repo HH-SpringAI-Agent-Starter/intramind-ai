@@ -49,6 +49,7 @@
 
 ## 工具清单
 
+- `knowledge_search` — 租户知识库语义检索（PGVector RAG）
 - `feishu_doc_search`
 - `yuque_page_fetch`
 - `oss_policy_doc_loader`
@@ -75,45 +76,45 @@
 ## 本地运行
 
 ```bash
-        cp .env.example .env
-        docker compose up -d
-        ollama pull qwen2.5:7b
-        ollama pull mxbai-embed-large
-        mvn spring-boot:run
+cp .env.example .env
+docker compose up -d
+ollama pull qwen2.5:7b
+ollama pull mxbai-embed-large
+mvn spring-boot:run
 ```
 
 ## 示例调用
 
 ```bash
-        curl -s -X POST http://localhost:8080/api/agent/ask \
-          -H 'Content-Type: application/json' \
-          -H 'X-Tenant-Id: demo' \
-          -d '{
-            "question": "报销差旅费需要哪些材料？超过 30 天还能报销吗？",
-            "userId": "u_1001",
-            "sessionId": "s_demo"
-          }' | jq
+curl -s -X POST http://localhost:8080/api/agent/ask \
+  -H 'Content-Type: application/json' \
+  -H 'X-Tenant-Id: demo' \
+  -d '{
+    "question": "报销差旅费需要哪些材料？超过 30 天还能报销吗？",
+    "userId": "u_1001",
+    "sessionId": "s_demo"
+  }' | jq
 ```
 
 ## 目录结构
 
 ```text
-        src/main/java/.../agent        Agent 编排
-        src/main/java/.../tools        工具调用
-        src/main/java/.../rag          RAG 服务
-        src/main/java/.../tenant       多租户上下文
-        src/main/resources/kb          示例知识库
-        src/main/resources/db          Flyway 初始化 SQL
-        docs/                          架构、API、部署、定价、演示脚本
+src/main/java/.../agent        Agent 编排
+src/main/java/.../tools        工具调用
+src/main/java/.../rag          RAG 服务
+src/main/java/.../tenant       多租户上下文
+src/main/resources/kb          示例知识库
+src/main/resources/db          Flyway 初始化 SQL
+docs/                          架构、API、部署、定价、演示脚本
 ```
 
 ## GitHub 上传
 
 ```bash
-        git init
-        git add .
-        git commit -m "Initial commit: IntraMind AI Community"
-        gh repo create intramind-ai --public --source=. --remote=origin --push
+git init
+git add .
+git commit -m "Initial commit: IntraMind AI Community"
+gh repo create intramind-ai --public --source=. --remote=origin --push
 ```
 
 ## 架构图
