@@ -1,5 +1,12 @@
 # Changelog
 
+## v1.1.3 (2026-09-22)
+
+### 🔧 维护
+- 每日轮转巡检维护（HH-SpringAI-Agent-Starter 每日轮转）
+- 子项目 CHANGELOG.md 补齐 v1.1.2 缺失条目（与根 CHANGELOG 版本对齐）
+- 子项目 README.md 工具清单补充 `knowledge_search`（与 DomainTools 代码对齐）
+
 ## v1.1.2 (2026-09-11)
 
 ### 维护
